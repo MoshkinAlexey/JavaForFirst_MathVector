@@ -5,7 +5,7 @@
 public class MathVector {
     private double[] vector;
 
-    private MathVector(double[] vector) {
+    public MathVector(double[] vector) {
         this.vector = vector;
     }
 
