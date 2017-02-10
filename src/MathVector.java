@@ -88,4 +88,17 @@ public class MathVector {
         }
         return Math.sqrt(result);
     }
+
+    // Векторное произведение трёхмерных векторов
+    public MathVector vectorMuliple(MathVector other) throws IllegalArgumentException {
+        if (this.length() != 3 || this.length() != other.length()) {
+            throw new IllegalArgumentException();
+        }
+
+        double Ax = this.getValue(0), Ay = this.getValue(1), Az = this.getValue(2),
+                Bx = other.getValue(0), By = other.getValue(1), Bz = other.getValue(2);
+        double[] resultVectorValues = {Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx};
+
+        return new MathVector(resultVectorValues);
+    }
 }
