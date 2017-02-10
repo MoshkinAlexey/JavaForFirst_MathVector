@@ -2,11 +2,12 @@
  * Mathematical Vector Class
  * @author Moshkin Alexey
  */
+
 public class MathVector {
     private double[] vector;
 
-    public MathVector(double[] vector) {
-        this.vector = vector;
+    public MathVector(double[] vectorValues) {
+        vector = vectorValues;
     }
 
     // Размерность вектора
@@ -27,7 +28,7 @@ public class MathVector {
     }
 
     // Вычисление суммы векторов
-    public MathVector vectorSum(MathVector other) throws IllegalArgumentException {
+    public MathVector vectorsSum(MathVector other) throws IllegalArgumentException {
         if (this.length() == other.length()) {
             MathVector resultVector = new MathVector(getVector());
             for (int i=0; i<length(); i++) {
@@ -40,7 +41,7 @@ public class MathVector {
     }
 
     // Вычисление разности векторов
-    public MathVector vectorDiff(MathVector other) throws IllegalArgumentException {
+    public MathVector vectorsDiff(MathVector other) throws IllegalArgumentException {
         if (length() == other.length()) {
             MathVector resultVector = new MathVector(getVector());
             for (int i=0; i<length(); i++) {
@@ -53,7 +54,7 @@ public class MathVector {
     }
 
     // Деление вектора на число
-    public void vectorDiv(double number) {
+    public void vectorDivByNum(double number) {
         for (int i=0; i<length(); i++) {
             setValue(i, getValue(i) / number);
             // Division by zero check
@@ -61,7 +62,7 @@ public class MathVector {
     }
 
     // Умножение вектора на число
-    public void vectorMultiple(double number) {
+    public void vectorMultipleByNum(double number) {
         for (int i=0; i<length(); i++) {
             setValue(i, getValue(i) * number);
         }
@@ -90,7 +91,7 @@ public class MathVector {
     }
 
     // Векторное произведение трёхмерных векторов
-    public MathVector vectorMuliple(MathVector other) throws IllegalArgumentException {
+    public MathVector vectorsMuliple(MathVector other) throws IllegalArgumentException {
         if (this.length() != 3 || this.length() != other.length()) {
             throw new IllegalArgumentException();
         }
@@ -100,5 +101,16 @@ public class MathVector {
         double[] resultVectorValues = {Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx};
 
         return new MathVector(resultVectorValues);
+    }
+
+    @Override
+    public String toString() {
+        String result = "{ ";
+        for (int i=0; i<length(); i++) {
+            result += getValue(i);
+            if (i != length()-1) result += ", ";
+        }
+        result += " }";
+        return result;
     }
 }
