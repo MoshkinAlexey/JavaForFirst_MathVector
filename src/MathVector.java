@@ -91,7 +91,7 @@ public class MathVector {
     }
 
     // Векторное произведение трёхмерных векторов
-    public MathVector vectorsMuliple(MathVector other) throws IllegalArgumentException {
+    public MathVector vectorsMultiple(MathVector other) throws IllegalArgumentException {
         if (this.length() != 3 || this.length() != other.length()) {
             throw new IllegalArgumentException();
         }
@@ -112,5 +112,21 @@ public class MathVector {
         }
         result += " }";
         return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        MathVector other = (MathVector) obj;
+
+        return this.length() == other.length() &&
+                this.getVector() == other.getVector();
     }
 }
