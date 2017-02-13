@@ -1,28 +1,54 @@
 /**
- * Mathematical Vector Class
- * @author Moshkin Alexey
+ * Математичекий вектор произвольной размерности
+ * (Вариант №5)
+ * Группа №13531/2 ИКНТ СПбПУ.
+ * @author Мошкин Алексей
  */
 
-public class MathVector {
+public final class MathVector {
+    /*
+    Хранение вектора в массиве вещественных значений.
+    Не final, так как над ним выполняются действия,
+    меняющие значения.
+     */
     private double[] vector;
 
+    /*
+    Стандартный конструктор класса.
+    Создаёт вектор, размерность которого равна
+    длине переданного массива
+     */
     public MathVector(double[] vectorValues) {
         vector = vectorValues;
     }
 
-    // Размерность вектора
+    /*
+    Доп. конструктор.
+    Создаёт нулевой вектор размерности N
+     */
+    public MathVector(int N) {
+        this(new double[N]);
+    }
+
+    /*
+    Возвращает длину массива, в котором хранится вектор
+    (Размерность вектора)
+     */
     private int length() {
         return vector.length;
     }
 
+    // Возвращает массив значений вектора
     private double[] getVector() {
         return this.vector;
     }
 
+    // Меняет значение координаты i данного вектора на значение value
     private void setValue(int i, double value) {
         vector[i] = value;
     }
 
+    // Возвращает значение координаты i данного вектора
     private double getValue(int i) {
         return vector[i];
     }
@@ -36,6 +62,10 @@ public class MathVector {
             }
             return resultVector;
         } else {
+            /*
+            Операция суммы векторов не может выполняться
+            на векторах разной размерности.
+             */
             throw new IllegalArgumentException();
         }
     }
@@ -49,6 +79,10 @@ public class MathVector {
             }
             return resultVector;
         } else {
+            /*
+            Операция разности векторов не может выполняться
+            на векторах разной размерности.
+             */
             throw new IllegalArgumentException();
         }
     }
@@ -57,7 +91,7 @@ public class MathVector {
     public void vectorDivByNum(double number) {
         for (int i=0; i<length(); i++) {
             setValue(i, getValue(i) / number);
-            // Division by zero check
+            // Division by zero check in test
         }
     }
 
@@ -77,6 +111,10 @@ public class MathVector {
             }
             return result;
         } else {
+            /*
+            Операция скалярного произведения векторов не может
+            выполняться на векторах разной размерности.
+             */
             throw new IllegalArgumentException();
         }
     }
@@ -92,6 +130,7 @@ public class MathVector {
 
     // Векторное произведение трёхмерных векторов
     public MathVector vectorsMultiple(MathVector other) throws IllegalArgumentException {
+        // Проверка на размерность обоих векторов
         if (this.length() != 3 || this.length() != other.length()) {
             throw new IllegalArgumentException();
         }
@@ -103,8 +142,12 @@ public class MathVector {
         return new MathVector(resultVectorValues);
     }
 
+    /*
+    Переопределение стандартных методов класса Object под наши нужны
+     */
     @Override
     public String toString() {
+        // Вектор принимает вид: { a1, a2, ..., aN }
         String result = "{ ";
         for (int i=0; i<length(); i++) {
             result += getValue(i);
@@ -128,5 +171,14 @@ public class MathVector {
 
         return this.length() == other.length() &&
                 this.getVector() == other.getVector();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = length() * 3011;
+        for (int i=0; i<length(); i++) {
+            result += (int) (i*vector[i]*1301);
+        }
+        return result;
     }
 }

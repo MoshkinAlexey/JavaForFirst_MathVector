@@ -17,5 +17,11 @@ public class Main {
         System.out.println(vector3.vectorsMultiple(vector4));
 
         System.out.println(vector1.scalarMultiple(vector2));
+
+        MathVector test1 = new MathVector(new double[] {17.1, 17.2, 17.3}),
+                test2 = new MathVector(new double[] {17.3, 17.2, 17.1});
+
+        System.out.println(test1.hashCode());
+        System.out.println(test2.hashCode());
     }
 }
