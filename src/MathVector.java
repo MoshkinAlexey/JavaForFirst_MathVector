@@ -19,7 +19,8 @@ public final class MathVector {
     длине переданного массива
      */
     public MathVector(double[] vectorValues) {
-        vector = vectorValues;
+        vector = new double[vectorValues.length];
+        System.arraycopy(vectorValues, 0, vector, 0, vectorValues.length);
     }
 
     /*
@@ -168,9 +169,16 @@ public final class MathVector {
         }
 
         MathVector other = (MathVector) obj;
+        if (this.length() != other.length()) return false;
 
-        return this.length() == other.length() &&
-                this.getVector() == other.getVector();
+        double[] otherVector = other.getVector(),
+                thisVector = getVector();
+
+        for (int i=0; i<length(); i++) {
+            if (Math.abs(thisVector[i] - otherVector[i]) > 1e-8) return false;
+        }
+
+        return true;
     }
 
     @Override

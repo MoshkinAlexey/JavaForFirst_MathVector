@@ -31,6 +31,14 @@ public class Tests {
 
     @Test // vectorSum(other vector)
     public void checkVectorsSum() {
-        assertEquals(vector3N1, vector3N1.vectorsSum(vector3N2));
+        MathVector vector1 = new MathVector(new double[] {1.2, 1.3, 1.0}),
+                vector2 = new MathVector(new double[] {5.4, -4.2, 90.1}),
+                vector3 = new MathVector(new double[] {6.6, -2.9, 91.1}),
+                vector4 = new MathVector(new double[] {-4.2, 5.5, -89.1}),
+                vector5 = new MathVector(new double[] {4.2, -5.5, 89.1});
+        assertEquals(vector3, vector1.vectorsSum(vector2));
+        assertEquals(vector3, vector2.vectorsSum(vector1));
+        assertEquals(vector4, vector1.vectorsDiff(vector2));
+        assertEquals(vector5, vector2.vectorsDiff(vector1));
     }
 }
