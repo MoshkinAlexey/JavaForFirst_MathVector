@@ -8,10 +8,10 @@
 public final class MathVector {
     /*
     Хранение вектора в массиве вещественных значений.
-    Не final, так как над ним выполняются действия,
-    меняющие значения.
+    Объект иммутабельный, т.е. не может изменяться.
      */
-    private double[] vector;
+    private final double[] vector;
+    public final int length;
 
     /*
     Стандартный конструктор класса.
@@ -21,6 +21,7 @@ public final class MathVector {
     public MathVector(double[] vectorValues) {
         vector = new double[vectorValues.length];
         System.arraycopy(vectorValues, 0, vector, 0, vectorValues.length);
+        length = vectorValues.length;
     }
 
     /*
@@ -31,37 +32,15 @@ public final class MathVector {
         this(new double[N]);
     }
 
-    /*
-    Возвращает длину массива, в котором хранится вектор
-    (Размерность вектора)
-     */
-    private int length() {
-        return vector.length;
-    }
-
-    // Возвращает массив значений вектора
-    private double[] getVector() {
-        return this.vector;
-    }
-
-    // Меняет значение координаты i данного вектора на значение value
-    private void setValue(int i, double value) {
-        vector[i] = value;
-    }
-
-    // Возвращает значение координаты i данного вектора
-    private double getValue(int i) {
-        return vector[i];
-    }
 
     // Вычисление суммы векторов
-    public MathVector vectorsSum(MathVector other) throws IllegalArgumentException {
-        if (this.length() == other.length()) {
-            MathVector resultVector = new MathVector(getVector());
-            for (int i=0; i<length(); i++) {
-                resultVector.setValue(i, getValue(i) + other.getValue(i));
+    public MathVector sumWith(MathVector other) throws IllegalArgumentException {
+        if (this.length == other.length) {
+            double[] resultVectorValues = new double[length];
+            for (int i=0; i<length; i++) {
+                resultVectorValues[i] = vector[i] + other.vector[i];
             }
-            return resultVector;
+            return new MathVector(resultVectorValues);
         } else {
             /*
             Операция суммы векторов не может выполняться
@@ -73,12 +52,12 @@ public final class MathVector {
 
     // Вычисление разности векторов
     public MathVector vectorsDiff(MathVector other) throws IllegalArgumentException {
-        if (length() == other.length()) {
-            MathVector resultVector = new MathVector(getVector());
-            for (int i=0; i<length(); i++) {
-                resultVector.setValue(i, getValue(i) - other.getValue(i));
+        if (length == other.length) {
+            double[] resultVectorValues = new double[length];
+            for (int i=0; i<length; i++) {
+                resultVectorValues[i] = vector[i] - other.vector[i];
             }
-            return resultVector;
+            return new MathVector(resultVectorValues);
         } else {
             /*
             Операция разности векторов не может выполняться
@@ -89,26 +68,29 @@ public final class MathVector {
     }
 
     // Деление вектора на число
-    public void vectorDivByNum(double number) {
-        for (int i=0; i<length(); i++) {
-            setValue(i, getValue(i) / number);
-            // Division by zero check in test
+    public MathVector divideByNumber(double number) {
+        double[] resultVectorValues = new double[length];
+        for (int i=0; i<length; i++) {
+            resultVectorValues[i] = vector[i] / number;
         }
+        return new MathVector(resultVectorValues);
     }
 
     // Умножение вектора на число
-    public void vectorMultipleByNum(double number) {
-        for (int i=0; i<length(); i++) {
-            setValue(i, getValue(i) * number);
+    public MathVector MultiplyByNumber(double number) {
+        double[] resultVectorValues = new double[length];
+        for (int i=0; i<length; i++) {
+            resultVectorValues[i] = vector[i] * number;
         }
+        return new MathVector(resultVectorValues);
     }
 
     // Вычисление скалярного произведения векторов
-    public double scalarMultiple(MathVector other) throws IllegalArgumentException {
-        if (length() == other.length()) {
+    public double scalarMultiply(MathVector other) throws IllegalArgumentException {
+        if (length == other.length) {
             double result = 0;
-            for (int i=0; i<length(); i++) {
-                result += getValue(i) * other.getValue(i);
+            for (int i=0; i<length; i++) {
+                result += vector[i] * other.vector[i];
             }
             return result;
         } else {
@@ -123,39 +105,47 @@ public final class MathVector {
     // Вычисление модуля вектора
     public double vectorModule() {
         double result = 0;
-        for (int i=0; i<length(); i++) {
-            result += getValue(i) * getValue(i);
+        for (int i=0; i<length; i++) {
+            result += vector[i] * vector[i];
         }
         return Math.sqrt(result);
     }
 
     // Векторное произведение трёхмерных векторов
-    public MathVector vectorsMultiple(MathVector other) throws IllegalArgumentException {
+    public MathVector vectorsMultiply(MathVector other) throws IllegalArgumentException {
         // Проверка на размерность обоих векторов
-        if (this.length() != 3 || this.length() != other.length()) {
+        if (length != 3 || length != other.length) {
             throw new IllegalArgumentException();
         }
 
-        double Ax = this.getValue(0), Ay = this.getValue(1), Az = this.getValue(2),
-                Bx = other.getValue(0), By = other.getValue(1), Bz = other.getValue(2);
-        double[] resultVectorValues = {Ay*Bz - Az*By, Az*Bx - Ax*Bz, Ax*By - Ay*Bx};
+        double aX = vector[0], aY = vector[1], aZ = vector[2],
+                bX = other.vector[0], bY = other.vector[1], bZ = other.vector[2];
+        double[] resultVectorValues = {aY*bZ - aZ*bY, aZ*bX - aX*bZ, aX*bY - aY*bX};
 
         return new MathVector(resultVectorValues);
     }
 
+    // Возвращает копию этого вектора.
+    public MathVector copy() {
+        return new MathVector(vector);
+    }
+
+
     /*
     Переопределение стандартных методов класса Object под наши нужны
      */
+
     @Override
     public String toString() {
         // Вектор принимает вид: { a1, a2, ..., aN }
-        String result = "{ ";
-        for (int i=0; i<length(); i++) {
-            result += getValue(i);
-            if (i != length()-1) result += ", ";
+        StringBuilder result = new StringBuilder();
+        result.append("{ ");
+        for (int i=0; i<length; i++) {
+            result.append(vector[i]);
+            if (i != length-1) result.append(", ");
         }
-        result += " }";
-        return result;
+        result.append(" }");
+        return result.toString();
     }
 
     @Override
@@ -169,13 +159,10 @@ public final class MathVector {
         }
 
         MathVector other = (MathVector) obj;
-        if (this.length() != other.length()) return false;
+        if (length != other.length) return false;
 
-        double[] otherVector = other.getVector(),
-                thisVector = getVector();
-
-        for (int i=0; i<length(); i++) {
-            if (Math.abs(thisVector[i] - otherVector[i]) > 1e-8) return false;
+        for (int i=0; i<length; i++) {
+            if (Math.abs(vector[i] - other.vector[i]) > 1e-8) return false;
         }
 
         return true;
@@ -183,9 +170,9 @@ public final class MathVector {
 
     @Override
     public int hashCode() {
-        int result = length() * 3011;
-        for (int i=0; i<length(); i++) {
-            result += (int) (i*vector[i]*1301);
+        int result = length * 3011;
+        for (int i=0; i<length; i++) {
+            result += (int) (i * vector[i] * 1301);
         }
         return result;
     }
