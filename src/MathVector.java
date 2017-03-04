@@ -46,12 +46,12 @@ public final class MathVector {
             Операция суммы векторов не может выполняться
             на векторах разной размерности.
              */
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Incorrect vectors dimensions");
         }
     }
 
     // Вычисление разности векторов
-    public MathVector vectorsDiff(MathVector other) throws IllegalArgumentException {
+    public MathVector diffWith(MathVector other) throws IllegalArgumentException {
         if (length == other.length) {
             double[] resultVectorValues = new double[length];
             for (int i=0; i<length; i++) {
@@ -63,7 +63,7 @@ public final class MathVector {
             Операция разности векторов не может выполняться
             на векторах разной размерности.
              */
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Incorrect vectors dimensions");
         }
     }
 
@@ -77,7 +77,7 @@ public final class MathVector {
     }
 
     // Умножение вектора на число
-    public MathVector MultiplyByNumber(double number) {
+    public MathVector multiplyByNumber(double number) {
         double[] resultVectorValues = new double[length];
         for (int i=0; i<length; i++) {
             resultVectorValues[i] = vector[i] * number;
@@ -98,12 +98,12 @@ public final class MathVector {
             Операция скалярного произведения векторов не может
             выполняться на векторах разной размерности.
              */
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Incorrect vectors dimensions");
         }
     }
 
     // Вычисление модуля вектора
-    public double vectorModule() {
+    public double module() {
         double result = 0;
         for (int i=0; i<length; i++) {
             result += vector[i] * vector[i];
@@ -112,10 +112,14 @@ public final class MathVector {
     }
 
     // Векторное произведение трёхмерных векторов
-    public MathVector vectorsMultiply(MathVector other) throws IllegalArgumentException {
+    public MathVector multiplyWith(MathVector other) throws IllegalArgumentException {
         // Проверка на размерность обоих векторов
         if (length != 3 || length != other.length) {
-            throw new IllegalArgumentException();
+            /*
+            Операция разности векторов не может выполняться
+            на векторах разной размерности.
+             */
+            throw new IllegalArgumentException("Incorrect vectors dimensions");
         }
 
         double aX = vector[0], aY = vector[1], aZ = vector[2],
